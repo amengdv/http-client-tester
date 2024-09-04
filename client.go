@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"log"
@@ -8,7 +9,7 @@ import (
 	"net/url"
 )
 
-func sendRequest(inputMethod, inputURL string) (*http.Response, error) {
+func sendRequest(inputMethod, inputURL string, inputBody interface{}, header http.Header) (*http.Response, error) {
     client := http.Client{}
 
     method := getMethod(inputMethod)
@@ -21,9 +22,18 @@ func sendRequest(inputMethod, inputURL string) (*http.Response, error) {
         return nil, fmt.Errorf("Error parsing url %w\n", err)
     }
 
+    bodyByte, err := encodeAnyToByte(inputBody)
+    if err != nil {
+        return nil, fmt.Errorf("Error parsing input data %w\n", err)
+    }
+
+    body := io.NopCloser(bytes.NewReader(bodyByte))
+
     req := &http.Request{
         Method: method,
         URL: url,
+        Header: header,
+        Body: body,
     }
 
     res, err := client.Do(req)
@@ -35,12 +45,22 @@ func sendRequest(inputMethod, inputURL string) (*http.Response, error) {
     return res, nil
 }
 
-func sendReqWrapper(inputMethod, inputURL string) {
+func sendReqWrapper(tc *TestCase) {
 
-    res, err := sendRequest(inputMethod, inputURL)
+    header := tc.Header
+    inputMethod := tc.Method
+    inputURL := tc.Url
+    inputData := tc.InputData
+
+    if header == nil {
+        header = &http.Header{}
+    }
+
+    res, err := sendRequest(inputMethod, inputURL, inputData, *header)
     if err != nil {
         log.Fatalf("%v\n", err)
     }
+
     defer res.Body.Close()
 
     data, err := io.ReadAll(res.Body)
@@ -48,6 +68,21 @@ func sendReqWrapper(inputMethod, inputURL string) {
         log.Fatalf("%v\n", err)
     }
 
-    fmt.Println(res)
-    fmt.Println(string(data))
+    if res.StatusCode == *tc.StatusCodeEqual {
+        fmt.Println("Status Code PASS")
+    }
+
+    expected, err := encodeAnyToByte(tc.Expected)
+    if err != nil {
+        log.Fatalf("%v\n", err)
+    }
+
+    fmt.Println("EXPECTED: ", string(expected))
+    if string(data) == string(expected) {
+        fmt.Println("Response Body PASS")
+    }
+
+    fmt.Println("RES:", res)
+    fmt.Println("DATA:", string(data))
 }
+

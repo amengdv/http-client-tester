@@ -1,6 +1,9 @@
 package main
 
-import "strings"
+import (
+	"encoding/json"
+	"strings"
+)
 
 func getMethod(method string) string {
     valid := []string{
@@ -18,4 +21,20 @@ func getMethod(method string) string {
     }
 
     return ""
+}
+
+func encodeAnyToByte(inputData interface{}) ([]byte, error) {
+
+    switch val := inputData.(type) {
+    case string:
+        return []byte(val), nil
+    case []byte:
+        return val, nil
+    default:
+        data, err := json.Marshal(val)
+        if err != nil {
+            return nil, err
+        }
+        return data, nil
+    }
 }

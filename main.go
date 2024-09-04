@@ -22,10 +22,8 @@ func main() {
         log.Fatalf("Error unmarshal json: %v\n", err)
     }
 
-    fmt.Println(tcs)
-
     for _, tc := range tcs.TestCases {
         fmt.Println("Name: ", tc.Name)
-        sendReqWrapper(tc.Method, tc.Url)
+        sendReqWrapper(&tc)
     }
 }
