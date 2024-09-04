@@ -1,8 +1,8 @@
 # http-client-tester
 
 ## Supported Input Field
-- `method:` string
-- `url:` string
+- `method:` string, **required**
+- `url:` string, **required**
 - `header:` object
 - `body:` any
 
@@ -11,8 +11,26 @@
 - `domain:port/path`
 
 ## Supported Expected Output Field
-- `is_true:` boolean
-- `is_header_contains:` boolean
+- `is_header_contains:` object
 - `contains:` any
 - `json_equal:` object
 - `content_type_equal:` string
+
+If a field is not provided, the parser will ignored it
+
+## Usage
+
+To test for one file
+```bash
+turl <filename>
+```
+
+To test for multiple choice of file
+```bash
+turl <filename> <filename2>
+```
+
+To test for all test file in current working directory
+```bash
+turl .
+```

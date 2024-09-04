@@ -1,0 +1,11 @@
+{
+    "tests": 
+    [
+        {
+            "name": "test1",
+            "method": "get",
+            "url": "http://localhost:8080",
+            "status_code_equal": 200
+        }
+    ]
+}
