@@ -2,41 +2,27 @@ package main
 
 import (
 	"bytes"
-	"fmt"
+	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"reflect"
 )
 
-func expect(res *http.Response, data []byte, tc *TestCase) {
-    tcExpect, err := encodeAnyToByte(tc.Expected)
+var notDefined error = errors.New("User does not defined the field")
+
+func checkResult(expected, actual testValue, testName string) {
+
+    // Check for response body first
+    err := checkBodyWrapper(expected, actual, testName)
     if err != nil {
-        log.Println("Error encode tc.Expected")
         return
     }
 
-    expected :=  map[string]interface{}{
-        "statusCode": tc.StatusCodeEqual,
-        "header": tc.HeaderEqual,
-    }
-
-    actual :=  map[string]interface{}{
-        "statusCode": res.StatusCode,
-        "header": res.Header,
-    }
-
-
+    // Check for other type
     pass :=  true
-
-    if tc.Expected != nil && !bytes.Equal(tcExpect,  data) {
-        fmt.Println("EXPECT: ", string(tcExpect))
-        fmt.Println("ACTUAL: ", string(data))
-        fmt.Println("TEST FAILED")
-        return
-    }
-
     for key, expectedVal := range expected {
-        fmt.Println("ON KEY: ", key)
+
         expectedValReflect := reflect.ValueOf(expectedVal)
 
         if expectedValReflect.Kind() == reflect.Ptr && expectedValReflect.IsNil() {
@@ -44,15 +30,7 @@ func expect(res *http.Response, data []byte, tc *TestCase) {
         }
 
         actualVal := actual[key]
-
-        // fmt.Println("Expected Pointer: ", expectedVal)
-        // fmt.Println("Expected Val Reflect: ", expectedValReflect)
-        // fmt.Println("Expected Type Reflect: ", reflect.TypeOf(expectedVal))
-
         copyExpectedVal := extractValueFromPointer(expectedValReflect)
-
-        fmt.Printf("Expect: %v\n", copyExpectedVal)
-        fmt.Printf("Actual: %v\n", actualVal)
 
         switch v := copyExpectedVal.(type) {
         case int:
@@ -66,19 +44,47 @@ func expect(res *http.Response, data []byte, tc *TestCase) {
         }
 
         if !pass {
-            fmt.Println("TEST FAILED")
+            printReport(testName, false, copyExpectedVal, actualVal)
             return
         }
     }
 
-
-    fmt.Println("TEST PASSED")
+    printReport(testName, true, nil, nil)
 
 }
 
-func extractValueFromPointer(val reflect.Value) any {
-    if val.Kind() != reflect.Ptr {
-        return nil
+func checkBodyEqual(actual []byte, expect []byte) (bool, error) {
+    if string(expect) == "null" {
+        return false, notDefined
     }
-    return reflect.Indirect(val).Interface()
+
+    if !bytes.Equal(actual, expect) {
+        return false, nil
+    }
+
+    return true, nil
 }
+
+func checkBodyWrapper(expected, actual testValue, testName string) error {
+    tcExpect, err := encodeAnyToByte(expected["expectedBody"].(*json.RawMessage))
+    if err != nil {
+        // Just log the error
+        // Can't stop checking other type just because of this error
+        log.Println("Error Decoding Expected Body Field")
+    }
+
+    if bodyEqual, err := checkBodyEqual(actual["expectedBody"].([]byte), tcExpect); err != nil {
+        if err != notDefined {
+            log.Println("Error encode expected field")
+        }
+    } else {
+        actualBody := actual["expectedBody"].([]byte)
+        if bodyEqual == false {
+            printReport(testName, false, string(actualBody), string(tcExpect))
+            return errors.New("Assert Expected != Actual")
+        }
+    }
+
+    return nil
+}
+

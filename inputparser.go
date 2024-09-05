@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 )
 
@@ -39,4 +40,11 @@ func encodeAnyToByte(inputData interface{}) ([]byte, error) {
         }
         return data, nil
     }
+}
+
+func extractValueFromPointer(val reflect.Value) any {
+    if val.Kind() != reflect.Ptr {
+        return nil
+    }
+    return reflect.Indirect(val).Interface()
 }

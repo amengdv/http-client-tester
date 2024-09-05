@@ -68,6 +68,9 @@ func sendReqWrapper(tc *TestCase) {
         log.Fatalf("%v\n", err)
     }
 
-    expect(res, data, tc)
+    expected := getExpected(tc)
+    actual := getActual(res, data)
+
+    checkResult(expected, actual, tc.Name)
 }
 
