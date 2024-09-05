@@ -7,44 +7,44 @@ import (
 )
 
 func getMethod(method string) string {
-    valid := []string{
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE",
-        "PATCH",
-    }
+	valid := []string{
+		"GET",
+		"POST",
+		"PUT",
+		"DELETE",
+		"PATCH",
+	}
 
-    for _, validm := range valid {
-        if strings.ToUpper(method) == validm {
-            return validm
-        }
-    }
+	for _, validm := range valid {
+		if strings.ToUpper(method) == validm {
+			return validm
+		}
+	}
 
-    return ""
+	return ""
 }
 
 func encodeAnyToByte(inputData interface{}) ([]byte, error) {
 
-    switch val := inputData.(type) {
-    case string:
-        return []byte(val), nil
-    case []byte:
-        return val, nil
-    case nil:
-        return nil, nil
-    default:
-        data, err := json.Marshal(val)
-        if err != nil {
-            return nil, err
-        }
-        return data, nil
-    }
+	switch val := inputData.(type) {
+	case string:
+		return []byte(val), nil
+	case []byte:
+		return val, nil
+	case nil:
+		return nil, nil
+	default:
+		data, err := json.Marshal(val)
+		if err != nil {
+			return nil, err
+		}
+		return data, nil
+	}
 }
 
 func extractValueFromPointer(val reflect.Value) any {
-    if val.Kind() != reflect.Ptr {
-        return nil
-    }
-    return reflect.Indirect(val).Interface()
+	if val.Kind() != reflect.Ptr {
+		return nil
+	}
+	return reflect.Indirect(val).Interface()
 }

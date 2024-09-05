@@ -10,67 +10,65 @@ import (
 )
 
 func sendRequest(inputMethod, inputURL string, inputBody interface{}, header http.Header) (*http.Response, error) {
-    client := http.Client{}
+	client := http.Client{}
 
-    method := getMethod(inputMethod)
-    if method == "" {
-        method = "GET"
-    }
+	method := getMethod(inputMethod)
+	if method == "" {
+		method = "GET"
+	}
 
-    url, err := url.Parse(inputURL)
-    if err != nil {
-        return nil, fmt.Errorf("Error parsing url %w\n", err)
-    }
+	url, err := url.Parse(inputURL)
+	if err != nil {
+		return nil, fmt.Errorf("Error parsing url %w\n", err)
+	}
 
-    bodyByte, err := encodeAnyToByte(inputBody)
-    if err != nil {
-        return nil, fmt.Errorf("Error parsing input data %w\n", err)
-    }
+	bodyByte, err := encodeAnyToByte(inputBody)
+	if err != nil {
+		return nil, fmt.Errorf("Error parsing input data %w\n", err)
+	}
 
-    body := io.NopCloser(bytes.NewReader(bodyByte))
+	body := io.NopCloser(bytes.NewReader(bodyByte))
 
-    req := &http.Request{
-        Method: method,
-        URL: url,
-        Header: header,
-        Body: body,
-    }
+	req := &http.Request{
+		Method: method,
+		URL:    url,
+		Header: header,
+		Body:   body,
+	}
 
-    res, err := client.Do(req)
-    if err != nil {
-        return nil, fmt.Errorf("Error Making HTTP request %w\n", err)
-    }
+	res, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("Error Making HTTP request %w\n", err)
+	}
 
-
-    return res, nil
+	return res, nil
 }
 
 func sendReqWrapper(tc *TestCase) {
 
-    header := tc.Header
-    inputMethod := tc.Method
-    inputURL := tc.Url
-    inputData := tc.InputData
+	header := tc.Header
+	inputMethod := tc.Method
+	inputURL := tc.Url
+	inputData := tc.InputData
 
-    if header == nil {
-        header = &http.Header{}
-    }
+	if header == nil {
+		header = &http.Header{}
+	}
 
-    res, err := sendRequest(inputMethod, inputURL, inputData, *header)
-    if err != nil {
-        log.Fatalf("%v\n", err)
-    }
+	res, err := sendRequest(inputMethod, inputURL, inputData, *header)
+	if err != nil {
+		log.Fatalf("%v\n", err)
+	}
 
-    defer res.Body.Close()
+	defer res.Body.Close()
 
-    data, err := io.ReadAll(res.Body)
-    if err != nil {
-        log.Fatalf("%v\n", err)
-    }
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		log.Fatalf("%v\n", err)
+	}
 
-    expected := getExpected(tc)
-    actual := getActual(res, data)
+	expected := getExpected(tc)
+	actual := getActual(res, data)
 
-    checkResult(expected, actual, tc.Name)
+	checkResult(expected, actual, tc.Name)
 }
-

@@ -8,22 +8,22 @@ import (
 )
 
 func main() {
-    args := os.Args[1]
+	args := os.Args[1]
 
-    data, err := os.ReadFile(args)
-    if err != nil {
-        log.Fatalf("Error reading from file: %v\n", err)
-    }
+	data, err := os.ReadFile(args)
+	if err != nil {
+		log.Fatalf("Error reading from file: %v\n", err)
+	}
 
-    tcs := Tests{}
+	tcs := Tests{}
 
-    err = json.Unmarshal(data, &tcs)
-    if err != nil {
-        log.Fatalf("Error unmarshal json: %v\n", err)
-    }
+	err = json.Unmarshal(data, &tcs)
+	if err != nil {
+		log.Fatalf("Error unmarshal json: %v\n", err)
+	}
 
-    for _, tc := range tcs.TestCases {
-        fmt.Println("Name: ", tc.Name)
-        sendReqWrapper(&tc)
-    }
+	for _, tc := range tcs.TestCases {
+		fmt.Println("Name: ", tc.Name)
+		sendReqWrapper(&tc)
+	}
 }
