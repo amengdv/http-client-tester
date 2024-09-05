@@ -1,2 +1,7 @@
 # Ignore binary
 out
+
+# IGNORE FOR TESTING PURPOSES CONTAIN SENSITIVE CONTENT
+test.json
+test2.json
+database.json
