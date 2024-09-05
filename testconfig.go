@@ -19,7 +19,7 @@ type TestCase struct {
     Header *http.Header `json:"header"`
     InputData *interface{} `json:"input_data"`
 
-    // Test case expected output field
+    // Test Case Expected Output Field
     StatusCodeEqual *int `json:"status_code_equal"`
     HeaderEqual *http.Header `json:"header_equal"`
     Expected *json.RawMessage `json:"expected"`

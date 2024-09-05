@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestInputDataParse(t *testing.T) {
     tests := []struct{
@@ -41,6 +43,11 @@ func TestInputDataParse(t *testing.T) {
                 Yes: false,
             },
             expected: `{"id":1,"email":"saul@bettercall.com","yes":false}`,
+        },
+        {
+            name: "test with nil value",
+            input: nil,
+            expected: "",
         },
     }
 

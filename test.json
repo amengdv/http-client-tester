@@ -15,10 +15,16 @@
                 "email": "saul@bettercall.com",
                 "password": "123456"
             },
-            "expected": {
-                "id":1,
-                "email":"saul@bettercall.com",
-                "is_chirpy_red":false},
+            "status_code_equal": 200
+        },
+        {
+            "name": "login chirpy user",
+            "method": "post",
+            "url": "http://localhost:8080/api/login",
+            "input_data": {
+                "email": "saul@bettercall.com",
+                "password": "123456"
+            },
             "status_code_equal": 200
         }
     ]

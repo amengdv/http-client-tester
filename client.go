@@ -68,21 +68,6 @@ func sendReqWrapper(tc *TestCase) {
         log.Fatalf("%v\n", err)
     }
 
-    if res.StatusCode == *tc.StatusCodeEqual {
-        fmt.Println("Status Code PASS")
-    }
-
-    expected, err := encodeAnyToByte(tc.Expected)
-    if err != nil {
-        log.Fatalf("%v\n", err)
-    }
-
-    fmt.Println("EXPECTED: ", string(expected))
-    if string(data) == string(expected) {
-        fmt.Println("Response Body PASS")
-    }
-
-    fmt.Println("RES:", res)
-    fmt.Println("DATA:", string(data))
+    expect(res, data, tc)
 }
 

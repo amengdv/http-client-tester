@@ -30,6 +30,8 @@ func encodeAnyToByte(inputData interface{}) ([]byte, error) {
         return []byte(val), nil
     case []byte:
         return val, nil
+    case nil:
+        return nil, nil
     default:
         data, err := json.Marshal(val)
         if err != nil {
