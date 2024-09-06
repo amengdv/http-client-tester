@@ -4,14 +4,14 @@
 - `method:` string, **required**
 - `url:` string, **required**
 - `header:` object
-- `body:` any
+- `input_data:` any
 
 ## Supported Input URL Format
 - `protocol://domain/path`
 - `domain:port/path`
 
 ## Supported Expected Output Field
-- `is_header_contains:` object
+- `header_contain_key:` object
 - `contains:` any
 - `json_equal:` object
 - `content_type_equal:` string

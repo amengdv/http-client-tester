@@ -19,9 +19,10 @@ type TestCase struct {
 	Header    *http.Header `json:"header"`
 	InputData *any `json:"input_data"`
 
-	// Test Case Expected Output Field
-	StatusCodeEqual *int             `json:"status_code_equal"`
-	BodyEqual        *json.RawMessage `json:"body_equal"`
+    // Test Case Expected Output Field
+    StatusCodeEqual *int `json:"status_code_equal"`
+    JsonBodyEqual *json.RawMessage `json:"body_equal"`
+    BodyContains *bodySnippet `json:"body_contains"`
     HeaderContainsKey *headerKey `json:"header_contain_key"`
     HeaderContainsVal *headerValue `json:"header_contain_value"`
 }
@@ -38,12 +39,15 @@ type testValue map[string]any
 type headerKey string
 type headerValue string
 
+type bodySnippet string
+
 func getExpected(tc *TestCase) testValue {
 	return map[string]any{
 		"statusCode":   tc.StatusCodeEqual,
-		"expectedBody": tc.BodyEqual,
+		"expectedBody": tc.JsonBodyEqual,
         "headerKey": tc.HeaderContainsKey,
         "headerVal": tc.HeaderContainsVal,
+        "bodyContains": tc.BodyContains,
 	}
 
 }
@@ -54,6 +58,7 @@ func getActual(res *http.Response, data []byte) testValue {
 		"expectedBody": data,
         "headerKey":  getHeaderKeys(res.Header),
         "headerVal": getHeaderValues(res.Header),
+        "bodyContains": bodySnippet(string(data)),
 	}
 }
 

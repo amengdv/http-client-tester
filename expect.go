@@ -32,6 +32,7 @@ func checkResult(expected, actual testValue, testName string) (bool, testResult)
 		actualVal := actual[key]
 		copyExpectedVal := extractValueFromPointer(expectedValReflect)
 
+        // Check result base on type
 		switch v := copyExpectedVal.(type) {
 		case int:
 			if v != actualVal.(int) {
@@ -47,6 +48,11 @@ func checkResult(expected, actual testValue, testName string) (bool, testResult)
             if !exist {
                 pass = false
             }
+        case bodySnippet:
+            exist := isBodyContains(v, actualVal.(bodySnippet))
+            if !exist {
+                pass = false
+            }
 		}
 
 		if !pass {
@@ -56,18 +62,8 @@ func checkResult(expected, actual testValue, testName string) (bool, testResult)
     return true, successTestResult(testName)
 }
 
-func checkBodyEqual(actual []byte, expect []byte) (bool, error) {
-	if string(expect) == "null" {
-		return false, notDefinedError
-	}
 
-	if !bytes.Equal(actual, expect) {
-		return false, nil
-	}
-
-	return true, nil
-}
-
+// HEADER KEY AND VALUE CHECKER
 func headerContainsKey(expect headerKey, actual []headerKey) bool {
     for _, v := range actual {
         if strings.ToLower(string(v)) == strings.ToLower(string(expect)) {
@@ -84,6 +80,27 @@ func headerContainsValue(expect headerValue, actual []headerValue) bool {
         }
     }
     return false
+}
+
+// BODY CHECKER
+func isBodyContains(expect, actual bodySnippet) bool {
+    if strings.Contains(string(actual), string(expect)) {
+        return true
+    }
+
+    return false
+}
+
+func checkBodyEqual(actual []byte, expect []byte) (bool, error) {
+	if string(expect) == "null" {
+		return false, notDefinedError
+	}
+
+	if !bytes.Equal(actual, expect) {
+		return false, nil
+	}
+
+	return true, nil
 }
 
 func checkBodyWrapper(expected, actual testValue, testName string) (testResult, error) {
