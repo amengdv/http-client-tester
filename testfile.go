@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"log"
-    "os"
+	"os"
+	"path/filepath"
+	"strings"
 )
 
 func evaluateTestFile(filename string) bool {
@@ -29,4 +31,24 @@ func evaluateTestFile(filename string) bool {
         }
 	}
     return passed
+}
+
+func evaluateTestFileR(dir string) (bool, error) {
+    entries, err := os.ReadDir(dir)
+    if err != nil {
+        return false, err
+    }
+
+    passed := false
+    for _, entry := range entries {
+        if !entry.IsDir() && 
+        strings.HasPrefix(entry.Name(), "clienttest_") && 
+        strings.HasSuffix(entry.Name(), ".json") {
+            passed = evaluateTestFile(filepath.Join(dir, entry.Name()))
+        } else if entry.IsDir() {
+            passed, err = evaluateTestFileR(filepath.Join(dir, entry.Name()))
+        }
+    }
+
+    return passed, nil
 }

@@ -2,6 +2,6 @@
 out
 
 # IGNORE FOR TESTING PURPOSES CONTAIN SENSITIVE CONTENT
-test.json
-test2.json
-database.json
+*.json
+test_dir
+test_dir3

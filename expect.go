@@ -134,7 +134,7 @@ func checkBodyWrapper(expected, actual testValue, testName string) (testResult, 
 		if bodyEqual == false {
             actArgs := string(actualBody)
             expArgs := string(tcExpect)
-            return failTestResult(testName, actArgs, expArgs), errors.New("Assert Expected != Actual")
+            return failTestResult(testName, expArgs, actArgs), errors.New("Assert Expected != Actual")
 		}
 	}
 
