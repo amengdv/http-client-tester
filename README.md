@@ -13,6 +13,7 @@
 ## Supported Expected Output Field
 - `status_code_equal`: int
 - `json_body_equal`: object
+- `body_equal`: string
 - `body_contains`: string
 - `header_contain_key`: string
 - `header_contain_value`: string
