@@ -25,6 +25,13 @@ type TestCase struct {
 	Expected        *json.RawMessage `json:"expected"`
 }
 
+type testResult struct {
+    testName string
+    testStatus string
+    expectedValue interface{}
+    actualValue interface{}
+}
+
 type testValue map[string]interface{}
 
 func getExpected(tc *TestCase) testValue {
@@ -42,5 +49,22 @@ func getActual(res *http.Response, data []byte) testValue {
 		"header":       res.Header,
 		"expectedBody": data,
 	}
+}
 
+func failTestResult(testName string, expectedVal, actualVal any) testResult {
+    return testResult{
+        testName: testName,
+        testStatus: "FAIL",
+        expectedValue: expectedVal,
+        actualValue: actualVal,
+    }
+}
+
+func successTestResult(testName string) testResult {
+    return testResult{
+        testName: testName,
+        testStatus: "SUCCESS",
+        expectedValue: nil,
+        actualValue: nil,
+    }
 }

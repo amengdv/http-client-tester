@@ -9,15 +9,16 @@ import (
 	"reflect"
 )
 
-var notDefined error = errors.New("User does not defined the field")
+var notDefinedError error = errors.New("User does not defined the field")
 
-func checkResult(expected, actual testValue, testName string) {
+
+func checkResult(expected, actual testValue, testName string) (bool, testResult) {
 
 	// Check for response body first
-	err := checkBodyWrapper(expected, actual, testName)
+	checkBodyResult, err := checkBodyWrapper(expected, actual, testName)
 	if err != nil {
-		return
-	}
+		return false, checkBodyResult 	
+    }
 
 	// Check for other type
 	pass := true
@@ -43,18 +44,17 @@ func checkResult(expected, actual testValue, testName string) {
 		}
 
 		if !pass {
-			printReport(testName, false, copyExpectedVal, actualVal)
-			return
+			return false, failTestResult(testName, copyExpectedVal, actualVal)
 		}
 	}
 
-	printReport(testName, true, nil, nil)
 
+    return true, successTestResult(testName)
 }
 
 func checkBodyEqual(actual []byte, expect []byte) (bool, error) {
 	if string(expect) == "null" {
-		return false, notDefined
+		return false, notDefinedError
 	}
 
 	if !bytes.Equal(actual, expect) {
@@ -64,7 +64,7 @@ func checkBodyEqual(actual []byte, expect []byte) (bool, error) {
 	return true, nil
 }
 
-func checkBodyWrapper(expected, actual testValue, testName string) error {
+func checkBodyWrapper(expected, actual testValue, testName string) (testResult, error) {
 	tcExpect, err := encodeAnyToByte(expected["expectedBody"].(*json.RawMessage))
 	if err != nil {
 		// Just log the error
@@ -73,16 +73,17 @@ func checkBodyWrapper(expected, actual testValue, testName string) error {
 	}
 
 	if bodyEqual, err := checkBodyEqual(actual["expectedBody"].([]byte), tcExpect); err != nil {
-		if err != notDefined {
+		if err != notDefinedError {
 			log.Println("Error encode expected field")
 		}
 	} else {
 		actualBody := actual["expectedBody"].([]byte)
 		if bodyEqual == false {
-			printReport(testName, false, string(actualBody), string(tcExpect))
-			return errors.New("Assert Expected != Actual")
+            actArgs := string(actualBody)
+            expArgs := string(tcExpect)
+            return failTestResult(testName, actArgs, expArgs), errors.New("Assert Expected != Actual")
 		}
 	}
 
-	return nil
+    return successTestResult(testName), nil
 }

@@ -22,8 +22,23 @@ func main() {
 		log.Fatalf("Error unmarshal json: %v\n", err)
 	}
 
+    passed := true
 	for _, tc := range tcs.TestCases {
-		fmt.Println("Name: ", tc.Name)
-		sendReqWrapper(&tc)
+        pass, res := sendReqWrapper(&tc)
+        passed = pass
+        if !pass {
+            printReport(res.testName, false, res.expectedValue, res.actualValue)
+            break
+        }
 	}
+
+    if passed {
+        fmt.Println("------------------------------------")
+        log.Println("PASSED")
+        fmt.Println("------------------------------------")
+    } else {
+        log.Println("FAILED")
+        fmt.Println("------------------------------------")
+    }
+
 }

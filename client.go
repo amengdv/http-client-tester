@@ -44,7 +44,7 @@ func sendRequest(inputMethod, inputURL string, inputBody interface{}, header htt
 	return res, nil
 }
 
-func sendReqWrapper(tc *TestCase) {
+func sendReqWrapper(tc *TestCase) (bool, testResult) {
 
 	header := tc.Header
 	inputMethod := tc.Method
@@ -70,5 +70,5 @@ func sendReqWrapper(tc *TestCase) {
 	expected := getExpected(tc)
 	actual := getActual(res, data)
 
-	checkResult(expected, actual, tc.Name)
+    return checkResult(expected, actual, tc.Name)
 }
