@@ -17,37 +17,43 @@ type TestCase struct {
 	Method    string       `json:"method"`
 	Url       string       `json:"url"`
 	Header    *http.Header `json:"header"`
-	InputData *interface{} `json:"input_data"`
+	InputData *any `json:"input_data"`
 
 	// Test Case Expected Output Field
 	StatusCodeEqual *int             `json:"status_code_equal"`
-	HeaderEqual     *http.Header     `json:"header_equal"`
-	Expected        *json.RawMessage `json:"expected"`
+	BodyEqual        *json.RawMessage `json:"body_equal"`
+    HeaderContainsKey *headerKey `json:"header_contain_key"`
+    HeaderContainsVal *headerValue `json:"header_contain_value"`
 }
 
 type testResult struct {
     testName string
     testStatus string
-    expectedValue interface{}
-    actualValue interface{}
+    expectedValue any
+    actualValue any
 }
 
-type testValue map[string]interface{}
+type testValue map[string]any
+
+type headerKey string
+type headerValue string
 
 func getExpected(tc *TestCase) testValue {
-	return map[string]interface{}{
+	return map[string]any{
 		"statusCode":   tc.StatusCodeEqual,
-		"header":       tc.HeaderEqual,
-		"expectedBody": tc.Expected,
+		"expectedBody": tc.BodyEqual,
+        "headerKey": tc.HeaderContainsKey,
+        "headerVal": tc.HeaderContainsVal,
 	}
 
 }
 
 func getActual(res *http.Response, data []byte) testValue {
-	return map[string]interface{}{
+	return map[string]any{
 		"statusCode":   res.StatusCode,
-		"header":       res.Header,
 		"expectedBody": data,
+        "headerKey":  getHeaderKeys(res.Header),
+        "headerVal": getHeaderValues(res.Header),
 	}
 }
 

@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
-	"net/http"
 	"reflect"
+	"strings"
 )
 
 var notDefinedError error = errors.New("User does not defined the field")
@@ -37,18 +37,22 @@ func checkResult(expected, actual testValue, testName string) (bool, testResult)
 			if v != actualVal.(int) {
 				pass = false
 			}
-		case http.Header:
-			if !reflect.DeepEqual(v, actualVal.(http.Header)) {
-				pass = false
-			}
+        case headerKey:
+            exist := headerContainsKey(v, actualVal.([]headerKey))
+            if !exist {
+                pass = false
+            }
+        case headerValue:
+            exist := headerContainsValue(v, actualVal.([]headerValue))
+            if !exist {
+                pass = false
+            }
 		}
 
 		if !pass {
 			return false, failTestResult(testName, copyExpectedVal, actualVal)
 		}
 	}
-
-
     return true, successTestResult(testName)
 }
 
@@ -62,6 +66,24 @@ func checkBodyEqual(actual []byte, expect []byte) (bool, error) {
 	}
 
 	return true, nil
+}
+
+func headerContainsKey(expect headerKey, actual []headerKey) bool {
+    for _, v := range actual {
+        if strings.ToLower(string(v)) == strings.ToLower(string(expect)) {
+            return true
+        }
+    }
+    return false
+}
+
+func headerContainsValue(expect headerValue, actual []headerValue) bool {
+    for _, v := range actual {
+        if strings.ToLower(string(v)) == strings.ToLower(string(expect)) {
+            return true
+        }
+    }
+    return false
 }
 
 func checkBodyWrapper(expected, actual testValue, testName string) (testResult, error) {

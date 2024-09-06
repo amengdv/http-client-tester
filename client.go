@@ -9,7 +9,7 @@ import (
 	"net/url"
 )
 
-func sendRequest(inputMethod, inputURL string, inputBody interface{}, header http.Header) (*http.Response, error) {
+func sendRequest(inputMethod, inputURL string, inputBody any, header http.Header) (*http.Response, error) {
 	client := http.Client{}
 
 	method := getMethod(inputMethod)
@@ -71,4 +71,22 @@ func sendReqWrapper(tc *TestCase) (bool, testResult) {
 	actual := getActual(res, data)
 
     return checkResult(expected, actual, tc.Name)
+}
+
+func getHeaderKeys(header http.Header) (keys []headerKey) {
+    for k := range header {
+        keys = append(keys, headerKey(k))
+    }
+    
+    return
+}
+
+func getHeaderValues(header http.Header) (values []headerValue) {
+    for _, v := range header {
+        for _, j := range v {
+            values = append(values, headerValue(j))
+        }
+    }
+
+    return
 }
