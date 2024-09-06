@@ -21,7 +21,8 @@ type TestCase struct {
 
     // Test Case Expected Output Field
     StatusCodeEqual *int `json:"status_code_equal"`
-    JsonBodyEqual *json.RawMessage `json:"body_equal"`
+    JsonBodyEqual *json.RawMessage `json:"json_body_equal"`
+    BodyEqual *bodyWhole `json:"body_equal"`
     BodyContains *bodySnippet `json:"body_contains"`
     HeaderContainsKey *headerKey `json:"header_contain_key"`
     HeaderContainsVal *headerValue `json:"header_contain_value"`
@@ -40,14 +41,16 @@ type headerKey string
 type headerValue string
 
 type bodySnippet string
+type bodyWhole string
 
 func getExpected(tc *TestCase) testValue {
 	return map[string]any{
 		"statusCode":   tc.StatusCodeEqual,
-		"expectedBody": tc.JsonBodyEqual,
+		"expectedJsonBody": tc.JsonBodyEqual,
         "headerKey": tc.HeaderContainsKey,
         "headerVal": tc.HeaderContainsVal,
         "bodyContains": tc.BodyContains,
+        "bodyEqual": tc.BodyEqual,
 	}
 
 }
@@ -55,10 +58,11 @@ func getExpected(tc *TestCase) testValue {
 func getActual(res *http.Response, data []byte) testValue {
 	return map[string]any{
 		"statusCode":   res.StatusCode,
-		"expectedBody": data,
+		"expectedJsonBody": data,
         "headerKey":  getHeaderKeys(res.Header),
         "headerVal": getHeaderValues(res.Header),
         "bodyContains": bodySnippet(string(data)),
+        "bodyEqual": bodyWhole(string(data)),
 	}
 }
 

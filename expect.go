@@ -53,6 +53,11 @@ func checkResult(expected, actual testValue, testName string) (bool, testResult)
             if !exist {
                 pass = false
             }
+        case bodyWhole:
+            equal := isBodyEqual(v, actualVal.(bodyWhole))
+            if !equal {
+                pass = false
+            }
 		}
 
 		if !pass {
@@ -83,6 +88,14 @@ func headerContainsValue(expect headerValue, actual []headerValue) bool {
 }
 
 // BODY CHECKER
+func isBodyEqual(expect, actual bodyWhole) bool {
+    if string(expect) == string(actual) {
+        return true
+    }
+    return false
+}
+
+
 func isBodyContains(expect, actual bodySnippet) bool {
     if strings.Contains(string(actual), string(expect)) {
         return true
@@ -104,19 +117,20 @@ func checkBodyEqual(actual []byte, expect []byte) (bool, error) {
 }
 
 func checkBodyWrapper(expected, actual testValue, testName string) (testResult, error) {
-	tcExpect, err := encodeAnyToByte(expected["expectedBody"].(*json.RawMessage))
+	tcExpect, err := encodeAnyToByte(expected["expectedJsonBody"].(*json.RawMessage))
 	if err != nil {
 		// Just log the error
 		// Can't stop checking other type just because of this error
 		log.Println("Error Decoding Expected Body Field")
 	}
 
-	if bodyEqual, err := checkBodyEqual(actual["expectedBody"].([]byte), tcExpect); err != nil {
+    actualBody := actual["expectedJsonBody"].([]byte)
+
+	if bodyEqual, err := checkBodyEqual(actualBody, tcExpect); err != nil {
 		if err != notDefinedError {
 			log.Println("Error encode expected field")
 		}
 	} else {
-		actualBody := actual["expectedBody"].([]byte)
 		if bodyEqual == false {
             actArgs := string(actualBody)
             expArgs := string(tcExpect)

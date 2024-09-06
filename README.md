@@ -11,10 +11,11 @@
 - `domain:port/path`
 
 ## Supported Expected Output Field
-- `header_contain_key:` object
-- `contains:` any
-- `json_equal:` object
-- `content_type_equal:` string
+- `status_code_equal`: int
+- `json_body_equal`: object
+- `body_contains`: string
+- `header_contain_key`: string
+- `header_contain_value`: string
 
 If a field is not provided, the parser will ignored it
 
