@@ -1,44 +1,32 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 )
 
 func main() {
-	args := os.Args[1]
-
-	data, err := os.ReadFile(args)
-	if err != nil {
-		log.Fatalf("Error reading from file: %v\n", err)
-	}
-
-	tcs := Tests{}
-
-	err = json.Unmarshal(data, &tcs)
-	if err != nil {
-		log.Fatalf("Error unmarshal json: %v\n", err)
-	}
+    args := os.Args[1:]
 
     passed := true
-	for _, tc := range tcs.TestCases {
-        pass, res := sendReqWrapper(&tc)
-        passed = pass
-        if !pass {
-            printReport(res.testName, false, res.expectedValue, res.actualValue)
-            break
-        }
-	}
-
-    if passed {
-        fmt.Println("------------------------------------")
-        log.Println("PASSED")
-        fmt.Println("------------------------------------")
+    if len(args) == 1 && args[0] == "." {
+        fmt.Println("DIR")
     } else {
-        log.Println("FAILED")
-        fmt.Println("------------------------------------")
+        for _, v := range args {
+            pass := evaluateTestFile(v)
+            passed = pass
+            if !pass {
+                log.Println("FAILED")
+                fmt.Println("----------------------------------")
+                break
+            }
+        }
     }
 
+    if passed {
+        fmt.Println("----------------------------------")
+        log.Println("PASSED")
+        fmt.Println("----------------------------------")
+    }
 }
