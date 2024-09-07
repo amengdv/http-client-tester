@@ -1,14 +1,30 @@
-# http-client-tester (UNDER CONSTRUCTION)
+# tURL - HTTP Client For Automated Testing
+
+tURL is a streamlined command-line tool for efficiently testing HTTP servers and APIs.
+Designed for **simplicity and flexibility**, tURL lets you define test cases in `JSON` format,
+specifying endpoints, methods, headers, bodies, and expected responses.
+While **not intended** for complex testing, tURL is ideal for quickly and easily running basic HTTP requests and verifying responses.
+It's particularly useful when you find yourself frequently using `curl` but need a more organized and reusable approach to testing.
 
 ## Supported Input Field
-- `method:` string, **required**
-- `url:` string, **required**
-- `header:` object
-- `input_data:` any
+- `name`: string
+- `method`: string
+- `url`: string, **required**
+- `header`: object
+- `input_data`: any
 
 ## Supported Input URL Format
-- `protocol://domain/path`
-- `domain:port/path`
+- `protocol://hostname/path`
+
+## Supported Method
+- `GET`
+- `POST`
+- `PUT`
+- `PATCH`
+- `DELETE`
+
+> [!NOTE]
+> `method` field is default to GET
 
 ## Supported Expected Output Field
 - `status_code_equal`: int
@@ -18,7 +34,7 @@
 - `header_contain_key`: string
 - `header_contain_value`: string
 
-If a field is not provided, the parser will ignored it
+If a field is not provided, the parser will ignored it.
 
 ## Usage
 

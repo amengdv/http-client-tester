@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 func main() {
@@ -18,6 +19,9 @@ func main() {
         }
     } else {
         for _, v := range args {
+            if filepath.Ext(v) != ".json" {
+                continue
+            }
             pass := evaluateTestFile(v)
             passed = pass
             break
