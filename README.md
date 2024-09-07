@@ -12,27 +12,37 @@ It's particularly useful when you find yourself frequently using `curl` but need
 
 1. Download the latest releases from Github
 
+**LINUX**
 ```bash
 # For Linux
 wget https://github.com/amengdv/http-client-tester/releases/download/v1.0.0/turl-linux-amd64 -O turl
-
-# For macOS (Intel)
-wget https://github.com/amengdv/http-client-tester/releases/download/v1.0.0/turl-darwin-amd64 -O turl
-
-# For macOS (Apple Silicon)
-wget https://github.com/yourusername/turl/releases/download/v1.0.0/turl-darwin-arm64 -O turl
-```
-
-2. Run this command
-
-```bash
 # Give it permission to execute
 chmod +x turl
 # Move to $PATH
 sudo mv turl /usr/local/bin
 ```
 
-3. Verify that it is installed
+**MacOS (Intel)**
+```bash
+# For macOS (Intel)
+wget https://github.com/amengdv/http-client-tester/releases/download/v1.0.0/turl-darwin-amd64 -O turl
+# Give it permission to execute
+chmod +x turl
+# Move to $PATH
+sudo mv turl /usr/local/bin
+```
+
+**MacOS (Apple Silicon)**
+```bash
+# For macOS (Apple Silicon)
+wget https://github.com/yourusername/turl/releases/download/v1.0.0/turl-darwin-arm64 -O turl
+# Give it permission to execute
+chmod +x turl
+# Move to $PATH
+sudo mv turl /usr/local/bin
+```
+
+2. Verify that it is installed
 
 ```bash
 turl --version
