@@ -12,19 +12,19 @@ import (
 func sendRequest(inputMethod, inputURL string, inputBody any, header http.Header) (*http.Response, error) {
 	client := http.Client{}
 
-	method := getMethod(inputMethod)
-	if method == "" {
-		method = "GET"
-	}
+	method, err := getMethod(inputMethod)
+    if err != nil {
+		return nil, fmt.Errorf("ERROR! %w\n", err)
+    }
 
 	url, err := url.Parse(inputURL)
 	if err != nil {
-		return nil, fmt.Errorf("Error parsing url %w\n", err)
+		return nil, fmt.Errorf("ERROR! Invalid URL\n")
 	}
 
 	bodyByte, err := encodeAnyToByte(inputBody)
 	if err != nil {
-		return nil, fmt.Errorf("Error parsing input data %w\n", err)
+		return nil, fmt.Errorf("ERROR! Can't Encode Body %w\n", err)
 	}
 
 	body := io.NopCloser(bytes.NewReader(bodyByte))
@@ -38,7 +38,7 @@ func sendRequest(inputMethod, inputURL string, inputBody any, header http.Header
 
 	res, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("Error Making HTTP request %w\n", err)
+        return nil, fmt.Errorf("ERROR! Can't make HTTP request: %w\n", err)
 	}
 
 	return res, nil

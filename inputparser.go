@@ -2,11 +2,17 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"reflect"
 	"strings"
 )
 
-func getMethod(method string) string {
+func getMethod(method string) (string, error) {
+
+    if len(method) == 0 {
+        return "GET", nil
+    }
+
 	valid := []string{
 		"GET",
 		"POST",
@@ -17,11 +23,11 @@ func getMethod(method string) string {
 
 	for _, validm := range valid {
 		if strings.ToUpper(method) == validm {
-			return validm
+			return validm, nil
 		}
 	}
 
-	return ""
+	return "", errors.New("Unsupported HTTP Method")
 }
 
 func encodeAnyToByte(inputData interface{}) ([]byte, error) {
