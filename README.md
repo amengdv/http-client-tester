@@ -32,7 +32,8 @@ To test for multiple choice of file
 turl <filename> <filename2>
 ```
 
-To test for all test file in current working directory
+To test for all test file in current working directory.
+**Prefix** your file's name with `turl_`.
 ```bash
 turl .
 ```

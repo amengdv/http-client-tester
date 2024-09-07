@@ -42,8 +42,8 @@ func evaluateTestFileR(dir string) (bool, error) {
     passed := false
     for _, entry := range entries {
         if !entry.IsDir() && 
-        strings.HasPrefix(entry.Name(), "clienttest_") && 
-        strings.HasSuffix(entry.Name(), ".json") {
+        strings.HasPrefix(entry.Name(), "turl_") && 
+        filepath.Ext(entry.Name()) == ".json" {
             passed = evaluateTestFile(filepath.Join(dir, entry.Name()))
         } else if entry.IsDir() {
             passed, err = evaluateTestFileR(filepath.Join(dir, entry.Name()))
