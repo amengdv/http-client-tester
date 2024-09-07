@@ -98,6 +98,27 @@ If a field is not provided, the parser will ignored it.
 
 ## Usage
 
+### Example test file
+
+**turl_example.json**
+```json
+{
+    "tests": 
+    [
+        {
+            "name": "test",
+            "method": "get",
+            "url": "http://localhost:8080/",
+            "body_equal": "OK",
+            "status_code_equal": 200
+        }
+    ]
+}
+```
+> [!IMPORTANT]
+> To begin writing the test case, start with a field `"tests"`. It is a list of
+objects i.e your test cases
+
 To test for one file
 ```bash
 turl <filename>
