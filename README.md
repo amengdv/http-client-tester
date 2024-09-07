@@ -144,3 +144,25 @@ turl .
 > [!IMPORTANT]
 > It is recommended to add the test file in `.gitignore` so you don't expose
 any sensitive information just in case.
+
+## Contributing 🤝
+
+1. Clone the repo
+```bash
+git clone https://github.com/amengdv/http-client-tester.git
+cd http-client-tester
+```
+
+2. Build the project. You need `go` CLI for this
+```bash
+go build -o turl
+```
+
+3. Run
+```bash
+./turl --version
+```
+
+> [!NOTE]
+> If you want to contribute, fork the repository and open a pull request to the
+`main` branch
