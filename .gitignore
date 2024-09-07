@@ -1,5 +1,6 @@
 # Ignore binary
 turl
+bin/
 
 # IGNORE FOR TESTING PURPOSES CONTAIN SENSITIVE CONTENT
 *.json
