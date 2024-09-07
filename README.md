@@ -134,3 +134,7 @@ To test for all test file in current working directory.
 ```bash
 turl .
 ```
+
+> [!IMPORTANT]
+> It is recommended to add the test file in `.gitignore` so you don't expose
+any sensitive information just in case.
