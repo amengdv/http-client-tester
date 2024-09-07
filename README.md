@@ -4,7 +4,13 @@ tURL is a streamlined command-line tool for efficiently testing HTTP servers and
 Designed for **simplicity and flexibility**, tURL lets you define test cases in `JSON` format,
 specifying endpoints, methods, headers, bodies, and expected responses.
 While **not intended** for complex testing, tURL is ideal for quickly and easily running basic HTTP requests and verifying responses.
-It's particularly useful when you find yourself frequently using `curl` but need a more organized and reusable approach to testing.
+
+
+It's particularly useful when you find yourself frequently using `curl` 
+but need a more organized and reusable approach to testing. This tool is built because
+I want to test my endpoint but found myself going back and forth using `curl` and it became hard
+to edit text and keep track of my previous command. And I don't want to
+use other HTTP client or GUI Client because I just want something simple and quick.
 
 ## Installation
 
