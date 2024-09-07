@@ -15,7 +15,7 @@ It's particularly useful when you find yourself frequently using `curl` but need
 **LINUX**
 ```bash
 # For Linux
-wget https://github.com/amengdv/http-client-tester/releases/download/v1.0.0/turl-linux-amd64 -O turl
+curl -L -o turl https://github.com/amengdv/http-client-tester/releases/download/v1.0.0/turl-linux-amd64
 # Give it permission to execute
 chmod +x turl
 # Move to $PATH
@@ -25,7 +25,7 @@ sudo mv turl /usr/local/bin
 **MacOS (Intel)**
 ```bash
 # For macOS (Intel)
-wget https://github.com/amengdv/http-client-tester/releases/download/v1.0.0/turl-darwin-amd64 -O turl
+curl -L -o turl https://github.com/amengdv/http-client-tester/releases/download/v1.0.0/turl-darwin-amd64
 # Give it permission to execute
 chmod +x turl
 # Move to $PATH
@@ -35,7 +35,7 @@ sudo mv turl /usr/local/bin
 **MacOS (Apple Silicon)**
 ```bash
 # For macOS (Apple Silicon)
-wget https://github.com/yourusername/turl/releases/download/v1.0.0/turl-darwin-arm64 -O turl
+curl -L -o turl https://github.com/yourusername/turl/releases/download/v1.0.0/turl-darwin-arm64
 # Give it permission to execute
 chmod +x turl
 # Move to $PATH
