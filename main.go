@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-const version = "v1.0.0"
+const version = "v1.1.0"
 
 func main() {
     args := os.Args[1:]
