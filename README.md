@@ -80,7 +80,7 @@ turl --version
 - `url`: string, **required**
 - `header`: object
 - `input_data`: any
-- `show_body`: boolean
+- `show_body`: boolean default=true
 
 ## Supported Input URL Format
 - `protocol://hostname/path`
