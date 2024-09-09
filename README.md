@@ -21,7 +21,7 @@ use other HTTP client or GUI Client because I just want something simple and qui
 **LINUX**
 ```bash
 # For Linux
-curl -L -o turl https://github.com/amengdv/http-client-tester/releases/download/v1.0.0/turl-linux-amd64
+curl -L -o turl https://github.com/amengdv/http-client-tester/releases/latest/download/turl-linux-amd64
 # Give it permission to execute
 chmod +x turl
 # Move to $PATH
@@ -31,7 +31,7 @@ sudo mv turl /usr/local/bin
 **MacOS (Intel)**
 ```bash
 # For macOS (Intel)
-curl -L -o turl https://github.com/amengdv/http-client-tester/releases/download/v1.0.0/turl-darwin-amd64
+curl -L -o turl https://github.com/amengdv/http-client-tester/releases/latest/download/turl-darwin-amd64
 # Give it permission to execute
 chmod +x turl
 # Move to $PATH
@@ -41,7 +41,7 @@ sudo mv turl /usr/local/bin
 **MacOS (Apple Silicon)**
 ```bash
 # For macOS (Apple Silicon)
-curl -L -o turl https://github.com/yourusername/turl/releases/download/v1.0.0/turl-darwin-arm64
+curl -L -o turl https://github.com/yourusername/turl/releases/latest/download/turl-darwin-arm64
 # Give it permission to execute
 chmod +x turl
 # Move to $PATH
@@ -56,10 +56,12 @@ turl --version
 
 ### Windows
 
-1. Download the latest binary releases from Github. Use Powershell.
+1. Download the latest binary releases from Github. Use Powershell. It is easier
+to just download the executable on the release pages. But if you're feeling extra here
+is the command
 
 ```bash
-Invoke-WebRequest -Uri "https://github.com/amengdv/http-client-tester/releases/download/v1.0.0/turl-windows-amd64.exe" -OutFile "C:\path\to\your\folder\turl.exe"
+Invoke-WebRequest -Uri "https://github.com/amengdv/http-client-tester/releases/latest/download/turl-windows-amd64.exe" -OutFile "C:\path\to\your\folder\turl.exe"
 ```
 > [!IMPORTANT]
 > Replace `path/to/your/folder` accordingly 
@@ -78,6 +80,7 @@ turl --version
 - `url`: string, **required**
 - `header`: object
 - `input_data`: any
+- `show_body`: boolean
 
 ## Supported Input URL Format
 - `protocol://hostname/path`
