@@ -5,8 +5,8 @@ import "fmt"
 func printReport(testName string, passed bool, expected, actual any) {
 	if passed {
 		fmt.Println("----------------------------------")
-		fmt.Println("PASSED")
-		fmt.Println("----------------------------------")
+        fmt.Println("STATUS: PASSED")
+        fmt.Println("----------------------------------")
 		return
 	}
 

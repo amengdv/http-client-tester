@@ -67,6 +67,13 @@ func sendReqWrapper(tc *TestCase) (bool, testResult) {
 		log.Fatalf("%v\n", err)
 	}
 
+    if tc.ShowBody == nil || *tc.ShowBody == true {
+        fmt.Println("----------------------------------")
+        fmt.Println(tc.Name)
+        fmt.Println("Response Body:", string(data))
+        fmt.Println("----------------------------------")
+    }
+
 	expected := getExpected(tc)
 	actual := getActual(res, data)
 

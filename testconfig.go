@@ -16,6 +16,7 @@ type TestCase struct {
 	// Test case input
 	Method    string       `json:"method"`
 	Url       string       `json:"url"`
+    ShowBody *bool `json:"show_body"`
 	Header    *http.Header `json:"header"`
 	InputData *any `json:"input_data"`
 
