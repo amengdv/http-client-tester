@@ -78,7 +78,7 @@ turl --version
 - `name`: string
 - `method`: string
 - `url`: string, **required**
-- `header`: object
+- `header`: object of lists (look at example usage)
 - `input_data`: any
 - `show_body`: boolean default=true
 
@@ -117,6 +117,11 @@ If a field is not provided, the parser will ignored it.
         {
             "name": "test",
             "method": "get",
+            "header": {
+                "Authorization": [
+                    "Bearer yourtoken"
+                ]
+            },
             "url": "http://localhost:8080/",
             "body_equal": "OK",
             "status_code_equal": 200
